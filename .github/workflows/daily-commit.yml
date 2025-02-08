@@ -17,9 +17,11 @@ jobs:
           echo "Last updated on $(date)" > last_update.txt
 
       - name: Commit and Push Changes (22f3001952@ds.study.iitm.ac.in)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "22f3001952@ds.study.iitm.ac.in"
           git add last_update.txt
           git commit -m "Automated daily commit $(date)" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/anshul49yadav/TDS_GA4Q8.git
+          git push origin main
