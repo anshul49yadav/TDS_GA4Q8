@@ -8,9 +8,13 @@ on:
 jobs:
   commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # This allows GitHub Actions to push changes
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # Ensure authentication
 
       - name: Modify or Create File
         run: |
@@ -30,8 +34,7 @@ jobs:
           git config --global user.email "22f3001952@ds.study.iitm.ac.in"
 
           git add last_update.txt
-          
-          # Ensure a commit is always made
           git commit -m "Automated daily commit $(date)" || echo "No changes to commit"
-          
-          git push origin main
+
+          # Authenticate using GitHub Token
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/anshul49yadav/TDS_GA4Q8.git main
