@@ -2,14 +2,14 @@ name: Automated Daily Commit
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # Runs daily at 2 AM UTC (7:30 AM IST)
+    - cron: '19 2 * * *'  # Runs daily at 2:19 AM UTC (7:49 AM IST)
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
   commit:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # This allows GitHub Actions to push changes
+      contents: write  # Grants write access to push commits
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
       - name: Modify or Create File
         run: |
           echo "Last updated on $(date)" > last_update.txt
-          cat last_update.txt  # Debugging step to verify file creation
+          cat last_update.txt  # Debugging step
 
       - name: Verify File Exists
         run: |
@@ -34,7 +34,9 @@ jobs:
           git config --global user.email "22f3001952@ds.study.iitm.ac.in"
 
           git add last_update.txt
-          git commit -m "Automated daily commit $(date)" || echo "No changes to commit"
-
-          # Authenticate using GitHub Token
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/anshul49yadav/TDS_GA4Q8.git main
+          
+          # Force a commit even if nothing changes
+          git commit -m "Automated daily commit $(date)" || true
+          
+          # Push with authentication
+          git push origin main
